@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "973872419879",
+    "project_id": "delta-frame-350916",
+    "storage_bucket": "delta-frame-350916.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973872419879:android:c5b5f5f52aab3c54ae2a02",
+        "android_client_info": {
+          "package_name": "com.example.flutter_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "973872419879-bhtqdv2l4h79mn49vo32l5hb72969va2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATHs66aynH0UmbKaNRxWWR7SJrsgIwZiE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "973872419879-bhtqdv2l4h79mn49vo32l5hb72969va2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
