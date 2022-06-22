@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase/auth_page.dart';
+import 'package:flutter_firebase/auth/auth_page.dart';
 import 'package:flutter_firebase/state_managment/state.dart';
-import 'package:provider/provider.dart';
 import 'home_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,7 +16,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userUID = context.read<Reducer>().userUID;
     return Scaffold(
       body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -25,7 +23,7 @@ class _MainPageState extends State<MainPage> {
           if (snapshot.hasData) {
             return const HomePage();
           } else {
-            return AuthPage();
+            return const AuthPage();
           }
         },
       ),

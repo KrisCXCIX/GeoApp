@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import './state_managment/state.dart';
+import 'state.dart';
 
 class RegisterPage extends StatefulWidget {
   final VoidCallback goToLoginPage;
-  RegisterPage({Key? key, required this.goToLoginPage}) : super(key: key);
+  const RegisterPage({Key? key, required this.goToLoginPage}) : super(key: key);
 
   @override
   State<RegisterPage> createState() => _RegisterPageState();
@@ -173,6 +173,5 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
-    ;
   }
 }

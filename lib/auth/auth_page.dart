@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase/login_page.dart';
-import 'package:flutter_firebase/register_page.dart';
-import 'package:flutter_firebase/state_managment/state.dart';
+import 'package:flutter_firebase/auth/login_page.dart';
+import 'package:flutter_firebase/state_managment/register_page.dart';
 
 class AuthPage extends StatefulWidget {
-  AuthPage({Key? key}) : super(key: key);
+  const AuthPage({Key? key}) : super(key: key);
 
   @override
   State<AuthPage> createState() => _AuthPageState();

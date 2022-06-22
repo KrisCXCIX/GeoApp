@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_firebase/state_managment/state.dart';
@@ -8,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback goToRegisterPage;
-  LoginPage({Key? key, required this.goToRegisterPage}) : super(key: key);
+  const LoginPage({Key? key, required this.goToRegisterPage}) : super(key: key);
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
