@@ -1,13 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/chosen_project.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class SingleProject extends StatelessWidget {
+class SingleProject extends StatefulWidget {
   final String projectName;
   final Object projectData;
 
   SingleProject({required this.projectName, required this.projectData});
 
+  @override
+  State<SingleProject> createState() => _SingleProjectState();
+}
+
+class _SingleProjectState extends State<SingleProject> {
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -19,7 +26,8 @@ class SingleProject extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                     builder: (context) => ChosenProject(
-                        projectName: projectName, data: projectData)),
+                        projectName: widget.projectName,
+                        data: widget.projectData)),
               );
             },
             child: Container(
@@ -32,30 +40,10 @@ class SingleProject extends StatelessWidget {
               child: Padding(
                   padding: const EdgeInsets.only(left: 40, top: 50),
                   child: Text(
-                    projectName,
+                    widget.projectName,
                     style: GoogleFonts.bebasNeue(
                         fontSize: 30, color: Colors.white),
                   )),
-            ),
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChosenProject(
-                      projectName: projectName, data: projectData)),
-            );
-          },
-          child: RawMaterialButton(
-            onPressed: () {},
-            elevation: 2.0,
-            fillColor: Colors.white,
-            shape: const CircleBorder(),
-            child: const Icon(
-              Icons.add,
-              size: 25.0,
             ),
           ),
         ),

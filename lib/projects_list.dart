@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase/single_project.dart';
+import 'package:flutter_firebase/single_list_element.dart';
 import 'package:flutter_firebase/state_managment/state.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -14,20 +13,21 @@ class ProjectsList extends StatefulWidget {
 }
 
 class _ProjectsList extends State<ProjectsList> {
-  final projectName = TextEditingController();
-  final xCoordinates = TextEditingController();
-  final yCoordinates = TextEditingController();
-  bool shouldAddDialogBeVisible = false;
+  final _projectName = TextEditingController();
 
-  // Future createUser(uid) async {
-  //   final project =
-  //       FirebaseFirestore.instance.collection(uid).doc(projectName.text);
+  Future createProject(uid) async {
+    final project =
+        FirebaseFirestore.instance.collection(uid).doc(_projectName.text);
 
-  //   final projectDetails = {'x': xCoordinates.text, 'y': yCoordinates.text};
-  //   await project.set(projectDetails);
-  // }
+    final projectDetails = {
+      'projectName': _projectName.text,
+    };
+    await project.set(projectDetails);
+    _projectName.text = '';
+    _dismissDialog();
+  }
 
-  void _showMaterialDialog() {
+  void _showAddProjectDialog() {
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -35,41 +35,74 @@ class _ProjectsList extends State<ProjectsList> {
           return Stack(
             children: <Widget>[
               SimpleDialog(
-                title: const Center(child: Text('Dodawanie projekt')),
+                title: Align(
+                  alignment: Alignment.bottomRight,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Add new project'),
+                      RawMaterialButton(
+                        onPressed: () {
+                          _dismissDialog();
+                        },
+                        elevation: 2.0,
+                        fillColor: Colors.white,
+                        padding: const EdgeInsets.all(15.0),
+                        shape: const CircleBorder(),
+                        child: const Icon(
+                          Icons.close,
+                          size: 15.0,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
                 children: <Widget>[
-                  Container(
+                  SizedBox(
                     width: double.infinity,
                     height: 200,
                     child: Align(
                       alignment: Alignment.bottomRight,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 10),
-                            child: GestureDetector(
-                                onTap: () {},
-                                child: GestureDetector(
-                                  child: Row(
-                                    children: const [
-                                      Text('Add'),
-                                      Icon(Icons.add),
-                                    ],
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 150,
+                              child: Center(
+                                child: SizedBox(
+                                  width: 200,
+                                  child: TextField(
+                                    controller: _projectName,
+                                    decoration: const InputDecoration(
+                                      border: UnderlineInputBorder(),
+                                      hintText: 'Enter project name',
+                                    ),
                                   ),
-                                )),
-                          ),
-                          GestureDetector(
-                              onTap: () {
-                                _dismissDialog();
-                              },
-                              child: GestureDetector(
-                                  child: Row(
-                                children: const [
-                                  Text('Clsoe'),
-                                  Icon(Icons.close),
-                                ],
-                              ))),
-                        ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 50,
+                              child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: RawMaterialButton(
+                                    onPressed: () {
+                                      createProject(
+                                          context.read<Reducer>().userUID);
+                                    },
+                                    elevation: 2.0,
+                                    fillColor: Colors.white,
+                                    padding: const EdgeInsets.all(5.0),
+                                    shape: const StadiumBorder(),
+                                    child: const Icon(
+                                      Icons.add_circle,
+                                      size: 35.0,
+                                    ),
+                                  )),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -127,22 +160,6 @@ class _ProjectsList extends State<ProjectsList> {
                       }
                     }),
               ),
-              // Visibility(
-              //   visible: shouldAddDialogBeVisible,
-              //   child: SimpleDialog(
-              //     title: const Text('GeeksforGeeks'),
-              //     children: <Widget>[
-              //       SimpleDialogOption(
-              //         onPressed: () {},
-              //         child: const Text('Option 1'),
-              //       ),
-              //       SimpleDialogOption(
-              //         onPressed: () {},
-              //         child: const Text('Option 2'),
-              //       ),
-              //     ],
-              //   ),
-              // ),
               Align(
                 alignment: Alignment.topCenter,
                 child: Container(
@@ -155,11 +172,7 @@ class _ProjectsList extends State<ProjectsList> {
                           child: InkWell(
                             splashColor: Colors.red, // Splash color
                             onTap: () {
-                              _showMaterialDialog();
-                              setState(() {
-                                shouldAddDialogBeVisible =
-                                    !shouldAddDialogBeVisible;
-                              });
+                              _showAddProjectDialog();
                             },
                             child: const SizedBox(
                                 width: 56,
@@ -175,110 +188,3 @@ class _ProjectsList extends State<ProjectsList> {
     );
   }
 }
-
-
-
-// TextButton(
-//             onPressed: () {
-//               _signOut();
-//             },
-//             child: const Text('Logout'),
-//           )
-
-// import 'dart:ffi';
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_firebase/state_managment/state.dart';
-// import 'package:provider/provider.dart';
-
-// class GeoForm extends StatefulWidget {
-//   GeoForm({Key? key}) : super(key: key);
-
-//   @override
-//   State<GeoForm> createState() => _GeoFormState();
-// }
-
-// class _GeoFormState extends State<GeoForm> {
-//   final projectName = TextEditingController();
-//   final xCoordinates = TextEditingController();
-//   final yCoordinates = TextEditingController();
-//   final List projects = [];
-
-//   Future createUser(uid) async {
-//     final project =
-//         FirebaseFirestore.instance.collection(uid).doc(projectName.text);
-
-//     final projectDetails = {'x': xCoordinates.text, 'y': yCoordinates.text};
-//     await project.set(projectDetails);
-//   }
-
-//   Future getProjects() async {
-//     final project = FirebaseFirestore.instance.collection;
-//   }
-
-//   Future _signOut() async {
-//     return FirebaseAuth.instance.signOut();
-//   }
-
-//   // @override
-//   // Widget build(BuildContext context) {
-//   //   return Container(
-//   //       child: CustomScrollView(
-//   //     slivers: <Widget>[
-//   //       const SliverAppBar(
-//   //         pinned: true,
-//   //         flexibleSpace: FlexibleSpaceBar(
-//   //           title: Text('Projects'),
-//   //         ),
-//   //       ),
-//   //       SliverFixedExtentList(
-//   //         itemExtent: 50.0,
-//   //         delegate: SliverChildBuilderDelegate(
-//   //           (BuildContext context, int index) {
-//   //             return Container(
-//   //               alignment: Alignment.center,
-//   //               color: Colors.lightBlue[100 * (index % 9)],
-//   //               child: Text('List Item $index'),
-//   //             );
-//   //           },
-//   //         ),
-//   //       ),
-//   //     ],
-//   //   ));
-//   // }
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Column(
-//         children: [
-//           TextFormField(
-//             controller: projectName,
-//           ),
-//           TextFormField(
-//             controller: xCoordinates,
-//           ),
-//           TextFormField(
-//             controller: yCoordinates,
-//           ),
-//           TextButton(
-//             onPressed: () {
-//               final uid = context.read<Reducer>().userUID;
-//               createUser(uid);
-//             },
-//             child: const Text('Save data'),
-//           ),
-//           TextButton(
-//             onPressed: () {
-//               _signOut();
-//             },
-//             child: const Text('Logout'),
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-//  
