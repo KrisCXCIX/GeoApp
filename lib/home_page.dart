@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'projects_list.dart';
+import 'package:flutter_firebase/single_project/projects_list.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

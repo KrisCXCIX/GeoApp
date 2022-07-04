@@ -50,15 +50,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
         create: (_) => Reducer(),
-        child: Expanded(
-            child: MaterialApp(
-                theme: ThemeData(
-                    appBarTheme: const AppBarTheme(
-                  color: Color(0xFF00695C),
-                )),
-                debugShowCheckedModeBanner: false,
-                home: const Scaffold(
-                  body: MainPage(),
-                ))));
+        child: MaterialApp(
+            theme: ThemeData(
+                appBarTheme: const AppBarTheme(
+              color: Color(0xFF00695C),
+            )),
+            debugShowCheckedModeBanner: false,
+            home: const Scaffold(
+              body: MainPage(),
+            )));
   }
 }

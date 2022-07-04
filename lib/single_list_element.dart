@@ -1,14 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase/chosen_project.dart';
+import 'package:flutter_firebase/single_project/chosen_project.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SingleProject extends StatefulWidget {
   final String projectName;
   final Object projectData;
 
-  SingleProject({required this.projectName, required this.projectData});
+  const SingleProject(
+      {Key? key, required this.projectName, required this.projectData})
+      : super(key: key);
 
   @override
   State<SingleProject> createState() => _SingleProjectState();

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,21 +17,37 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _repeatpasswordController = TextEditingController();
+  bool _isLoading = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
   String _errorText = '';
 
   Future signUp(stateRead) async {
     if (_passwordController.text.trim() ==
         _repeatpasswordController.text.trim()) {
+      setState(() {
+        _isLoading = true;
+      });
+      final usersUIDs =
+          await FirebaseFirestore.instance.collection('users').doc('uid').get();
       auth
           .createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim())
-          .then((value) => stateRead.saveUserUID(auth.currentUser?.uid))
-          .catchError((error, stackTrace) =>
-              setState((() => _errorText = "Email is incorrect")));
+          .then((value) => {
+                FirebaseFirestore.instance.collection('users').doc('uid').set({
+                  'usersUIDs': [
+                    ...usersUIDs['usersUIDs'],
+                    auth.currentUser?.uid
+                  ]
+                }),
+                stateRead.saveUserUID(auth.currentUser?.uid),
+                stateRead.saveAllUsersUID(usersUIDs['usersUIDs']),
+              })
+          .catchError(
+              (error, stackTrace) => setState((() => _errorText = 'Error')));
     } else {
       setState(() {
+        _isLoading = false;
         _errorText = "Passwords are not the same";
       });
     }
@@ -64,6 +81,13 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 10),
               const Icon(Icons.map_outlined, size: 150),
+              Visibility(
+                visible: _isLoading,
+                child: const CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 1.5,
+                ),
+              ),
               Visibility(
                 maintainSize: true,
                 maintainAnimation: true,

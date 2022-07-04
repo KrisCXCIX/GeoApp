@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/actions.dart';
 import 'package:flutter_firebase/single_list_element.dart';
 import 'package:flutter_firebase/state_managment/state.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,16 +16,24 @@ class ProjectsList extends StatefulWidget {
 class _ProjectsList extends State<ProjectsList> {
   final _projectName = TextEditingController();
 
-  Future createProject(uid) async {
-    final project =
-        FirebaseFirestore.instance.collection(uid).doc(_projectName.text);
+  Future createProject(context, String uid) async {
+    try {
+      final project =
+          FirebaseFirestore.instance.collection(uid).doc(_projectName.text);
 
-    final projectDetails = {
-      'projectName': _projectName.text,
-    };
-    await project.set(projectDetails);
-    _projectName.text = '';
-    _dismissDialog();
+      final projectDetails = {
+        'projectName': _projectName.text,
+        'projectOwners': [uid],
+      };
+      await project.set(projectDetails);
+      _projectName.text = '';
+      dismissDialog(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Project has been added")));
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Something went wrong ")));
+    }
   }
 
   void _showAddProjectDialog() {
@@ -43,7 +52,7 @@ class _ProjectsList extends State<ProjectsList> {
                       const Text('Add new project'),
                       RawMaterialButton(
                         onPressed: () {
-                          _dismissDialog();
+                          dismissDialog(context);
                         },
                         elevation: 2.0,
                         fillColor: Colors.white,
@@ -88,7 +97,7 @@ class _ProjectsList extends State<ProjectsList> {
                                   alignment: Alignment.bottomCenter,
                                   child: RawMaterialButton(
                                     onPressed: () {
-                                      createProject(
+                                      createProject(context,
                                           context.read<Reducer>().userUID);
                                     },
                                     elevation: 2.0,
@@ -113,11 +122,7 @@ class _ProjectsList extends State<ProjectsList> {
         });
   }
 
-  _dismissDialog() {
-    Navigator.pop(context);
-  }
-
-  Stream<List> getProjects(uid) => FirebaseFirestore.instance
+  Stream<List> getProjects(String uid) => FirebaseFirestore.instance
       .collection(uid)
       .snapshots()
       .map((snapshot) => snapshot.docs
@@ -170,7 +175,7 @@ class _ProjectsList extends State<ProjectsList> {
                         child: Material(
                           color: Colors.white, // Button color
                           child: InkWell(
-                            splashColor: Colors.red, // Splash color
+                            splashColor: Colors.amber[800], // Splash color
                             onTap: () {
                               _showAddProjectDialog();
                             },
